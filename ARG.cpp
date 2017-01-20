@@ -1,19 +1,4 @@
-/*    #Recombination list
-    self.recombList = []
-    self.localRecomb = []
-    for i in range(self.M):
-        tmp = [0, 0, 0]
-        self.localRecomb.append(tmp)
-        del tmp
-        
-    self.brStack = []
-    self.brP = 0
-    for i in range(self.M):
-        tmp = [0, 0, 0, 0]
-        self.brStack.append(tmp)
-        del tmp
-}
-*/
+#include "ARG.h"
 
 int Argentum::GetSize(){
 	return M;
@@ -26,21 +11,28 @@ void Argentum::ReinitSite(){
 //	brP = 0;
 }
     
-void Argentum::FeedSite(std::vector<int>& x){
+void Argentum::FeedSite(std::vector<int>& x, bool debug){
 	int i;
 	if (x.size() != M){
 		std::cerr << "Incorrect number of alleles: contains " << x.size() << ", expected " << M << '.' << std::endl;
 		exit (EXIT_FAILURE);
 	}
 	for (i = 0; i < M; i++)
-		y[a[i]] = x[i];
+		y[i] = x[a[i]];
 //	PrintTree();
 	ReinitSite();
+//	std::cout << "checkpoint 1" << endl;
 	ReduceTree();
-//	PrintReducedTree();
+//	std::cout << "checkpoint 2" << endl;
+//	if (debug)
+//		PrintReducedTree();
 	AddBranches();
-//	PrintReducedTree1();
-	RecombPBWT();
+//	std::cout << "checkpoint 3" << endl;
+//	if (debug)
+//		PrintReducedTree1();
+	RecombPBWT(debug);
+	
+//	std::cout << "checkpoint 4" << endl;
 }
 
 void Argentum::ReduceTree(){
@@ -167,7 +159,7 @@ void Argentum::AddBranches(){
 }
 					
 
-void Argentum::CopyBranchR(int id, int L = -1, int R = -1, double newD = -1.0, int allele = -1, int h = -1){
+void Argentum::CopyBranchR(int id, int L , int R , double newD , int allele, int h ){
 	int i;
 	int H;
     if (L == -1)
@@ -235,25 +227,31 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 					b[q] = a[j];
 					q++;
 				}
+//				memcpy(d_tmp+q, d+rPack[i].el[0], sizeof(double)*(rPack[i].el[1]-rPack[i].el[0]));
+//				memcpy(b+q, a+rPack[i].el[0], sizeof(int)*(rPack[i].el[1]-rPack[i].el[0]));
+//				q += (rPack[i].el[1]-rPack[i].el[0]);				
 			}
 		}
 	}
-	rPack1[oneBr].el[1] = rPack1[i].el[0] + p;
+	rPack1[oneBr].el[3] = rPack1[oneBr].el[1];
+	rPack1[oneBr].el[1] = rPack1[oneBr].el[0] + p;
 	for (i = oneBr+1; i < rM1; i++){
 	    rPack1[i].el[0] += p;
 	    rPack1[i].el[1] += p;
 	}
 	if (oneBr+1 < rM1){
 		j = 0;
-    	for(i = rPack1[oneBr+1].el[0]; i < rPack1[lastZero].el[1]; i++){
+    	for(i = rPack1[oneBr+1].el[0]; i < rPack1[rM1-1].el[1]; i++){
 			d[i] = d_tmp[j];
 			a[i] = b[j];
 			j++;
 		}
+//		memcpy(d+rPack1[oneBr+1].el[0], d_tmp, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
+//		memcpy(a+rPack1[oneBr+1].el[0], b, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
 	}
 }
 
-void Argentum::RecombPBWT(){
+void Argentum::RecombPBWT(bool debug){
     int size = 0, brId;
     int num1 = 0; //total number of ones
     int num2 = 0; //number of ones after the stable position
@@ -279,7 +277,16 @@ void Argentum::RecombPBWT(){
                 u = rPack1[i].el[0] + num2;
 				DL = -1;
 			}
-            d_tmp[p] = d[rPack1[brId].el[3]] + 1.0;
+			if (rPack1[brId].el[3] == -1){
+				if (rPack1[brId].el[0] == 0)
+					d_tmp[p] = d[1] + 1.0;
+				else if (rPack1[brId].el[0] == M-1)
+					d_tmp[p] = d[M-1] + 1.0;
+				else
+					d_tmp[p] = std::min(d[rPack1[brId].el[0]], d[rPack1[brId].el[0]+1]) + 1.0;
+			}
+			else
+            	d_tmp[p] = d[rPack1[brId].el[3]] + 1.0;
             b[p] = a[ rPack1[i].el[0] ];
             p++;
 			if (rPack1[i].el[3] == -1)
