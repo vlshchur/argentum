@@ -4,10 +4,10 @@
 void PerformTest(){
 	int i;
 //	int xa[] = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-	int xa[] = {1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1};
+	int xa[] = {0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0};
 	std::vector<int> x;
 //	double da[] = {0, 4, 3, 5, 2, 3, 5, 4, 1, 2};
-	double da[] = {0, 5, 4, 3, 4, 5, 1, 5, 2, 4, 2, 3};
+	double da[] = {0, 5, 4, 3, 4, 2, 5, 5, 1, 4, 4, 4};
 	std::vector<double> dFunc;
 	int len = sizeof(xa)/sizeof(xa[0]);
     if (len != sizeof(da)/sizeof(da[0]) ){
@@ -32,6 +32,8 @@ void Help(){
 }
 
 int main(int argc, char *argv[]){
+/*	PerformTest();
+	return 1;*/
 	if (argc < 2){
 		cout << "Missing input file." << endl;
 		return 0;
