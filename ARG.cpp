@@ -223,6 +223,10 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 			else{
 				CopyBranchR(i, rPack[i].el[0]-p, rPack[i].el[1]-p);
 				for (j = rPack[i].el[0]; j < rPack[i].el[1]; j++){
+					if (q >= M)
+						cout << "Checkpoint 1, q = " << q << endl;
+					if (j >= M)
+						cout << "Checkpoint 1, j= " << j << endl;
 					d_tmp[q] = d[j];
 					b[q] = a[j];
 					q++;
@@ -242,6 +246,10 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 	if (oneBr+1 < rM1){
 		j = 0;
     	for(i = rPack1[oneBr+1].el[0]; i < rPack1[rM1-1].el[1]; i++){
+			if (i >= M)
+				cout << "Checkpoint 2, i = " << i << endl;
+			if (j >= M)
+				cout << "Checkpoint 2, j= " << j << endl;
 			d[i] = d_tmp[j];
 			a[i] = b[j];
 			j++;
@@ -313,6 +321,10 @@ void Argentum::RecombPBWT(bool debug){
             if (i < rM1 - 1)
                 DL = rd1[i+1];
             for (j = rPack1[i].el[0]+1; j < rPack1[i].el[1]; j++){
+				if (u >= M)
+					cout << "Checkpoint 3, u = " << u << endl;
+				if (j >= M)
+					cout << "Checkpoint 3, j= " << j << endl;
                 d_tmp[u] = d[j];
                 b[u] = a[j];
                 u++;
