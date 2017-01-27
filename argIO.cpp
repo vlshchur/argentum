@@ -60,6 +60,10 @@ void ReadFile (char *filename){
 		myfile.ignore(segsites); // skip whole line and go to the same column in the next row
 	    }
 	    cout << "\n";
+		ARG.SetSiteNumber(j);
+		if (j == -1){
+			ARG.PrintTreeForTest(x);
+		}
 	    ARG.FeedSite(x);
 		t2 = time(NULL);
 	}
