@@ -54,6 +54,10 @@ class Argentum{
 
 		int M;
 		
+		//DEBUG
+		int *a_debug;
+		//DEBUG_END
+		
 		//Current site (to be set through SetSiteNumber() if necessary - by default not set)
 		int siteNumber;
 		
@@ -94,6 +98,10 @@ class Argentum{
 			int i;
 			M = size;
 			if (M > 0){
+				//DEBUG
+				a_debug = new int [M];
+				//DEBUG_END
+				
 				y = new int [M];
 				a = new int [M];
 				b = new int [M];
@@ -118,13 +126,14 @@ class Argentum{
 		void FeedSite(std::vector<int>&, bool = false);
 		void SetTree(std::vector<double>&);
 		void PrintTree();
-		void PrintTreeForTest(std::vector<int>&)
+		void PrintTreeForTest(std::vector<int>&);
 		void PrintReducedTree();
 		void PrintReducedTree1();
 		void DefaultControl();
 		void RecombStrategy();
 		void SetSiteNumber(int);
 		int GetSize();
+		void PerformCheck();
 
 };
 
