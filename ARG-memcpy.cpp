@@ -4,6 +4,10 @@ int Argentum::GetSize(){
 	return M;
 }
 
+void Argentum::SetSiteNumber(int site){
+	siteNumber = site;
+}
+
 void Argentum::ReinitSite(){
 	rM = 0;
 	rM1 = 0;
@@ -21,18 +25,13 @@ void Argentum::FeedSite(std::vector<int>& x, bool debug){
 		y[i] = x[a[i]];
 //	PrintTree();
 	ReinitSite();
-//	std::cout << "checkpoint 1" << endl;
 	ReduceTree();
-//	std::cout << "checkpoint 2" << endl;
 //	if (debug)
 //		PrintReducedTree();
 	AddBranches();
-//	std::cout << "checkpoint 3" << endl;
 //	if (debug)
 //		PrintReducedTree1();
 	RecombPBWT(debug);
-	
-//	std::cout << "checkpoint 4" << endl;
 }
 
 void Argentum::ReduceTree(){
@@ -222,7 +221,11 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 				CopyBranchR(i);
 			else{
 				CopyBranchR(i, rPack[i].el[0]-p, rPack[i].el[1]-p);
-/*				for (j = rPack[i].el[0]; j < rPack[i].el[1]; j++){
+				/*for (j = rPack[i].el[0]; j < rPack[i].el[1]; j++){
+//					if (q < 0 or q >= M)
+//						cout << "Checkpoint 1, q = " << q << endl;
+//					if (j < 0 or j >= M)
+//						cout << "Checkpoint 1, j= " << j << endl;
 					d_tmp[q] = d[j];
 					b[q] = a[j];
 					q++;
@@ -240,14 +243,18 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 	    rPack1[i].el[1] += p;
 	}
 	if (oneBr+1 < rM1){
-		j = 0;
-/*    	for(i = rPack1[oneBr+1].el[0]; i < rPack1[rM1-1].el[1]; i++){
+		/*j = 0;
+    	for(i = rPack1[oneBr+1].el[0]; i < rPack1[rM1-1].el[1]; i++){
+//			if (i < 0 or i >= M)
+//				cout << "Checkpoint 2, i = " << i << endl;
+//			if (j < 0 or j >= M)
+//				cout << "Checkpoint 2, j= " << j << endl;
 			d[i] = d_tmp[j];
 			a[i] = b[j];
 			j++;
 		}*/
 		memcpy(d+rPack1[oneBr+1].el[0], d_tmp, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
-		memcpy(a+rPack1[oneBr+1].el[0], b, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
+		memcpy(a+rPack1[oneBr+1].el[0], b, sizeof(int)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
 	}
 }
 
@@ -311,7 +318,17 @@ void Argentum::RecombPBWT(bool debug){
             u++;
             if (i < rM1 - 1)
                 DL = rd1[i+1];
-/*            for (j = rPack1[i].el[0]+1; j < rPack1[i].el[1]; j++){
+            /*for (j = rPack1[i].el[0]+1; j < rPack1[i].el[1]; j++){
+//				if (u < 0 or u >= M){
+//					cout << "Checkpoint 3, u = " << u << endl;
+//					cout << "Error at site " << siteNumber << endl;
+//					exit(0);
+//				}
+//				if (j < 0 or j >= M){
+//					cout << "Checkpoint 3, j= " << j << endl;
+//					cout << "Error at site " << siteNumber << endl;
+//					exit(0);
+//				}
                 d_tmp[u] = d[j];
                 b[u] = a[j];
                 u++;
@@ -322,8 +339,57 @@ void Argentum::RecombPBWT(bool debug){
 		}
 	}
     d_tmp[ rPack1[brId].el[0] - (num1 - num2) ] = D1;
+/*	int swap1 = *a;
+	*a = *b;
+	*b = swap1;
+	double swap2 = *d;
+	*d = *d_tmp;
+	*d_tmp = swap2;*/
 	std::swap(a, b);
 	std::swap(d, d_tmp);
+}
+
+void Argentum::PerformCheck(){
+	for(int i = 0; i < M; i++)
+		a_debug[i] = 0;
+	for(int i = 0; i < M; i++){
+		if (a[i] < 0 or a[i] >= M){
+			cout << "a out of range at site " << siteNumber << endl;
+			exit(0);
+		}
+		if (a_debug[a[i]] == 1){
+			cout << "a-values duplicated at site " << siteNumber << endl;
+			exit(0);
+		}
+		a_debug[a[i]] = 1;
+	}
+	for(int i = 0; i < M; i++){
+		if (a_debug[a[i]] == 0){
+			cout << "a-value is absent at site" << siteNumber << endl;
+			exit(0);
+		}
+	}
+}
+
+void Argentum::PrintTreeForTest(std::vector<int>& x){
+	int i;
+	for (i = 0; i < M; i++){
+		cout << d[i] << ", ";
+	}
+	cout << endl;
+	for (i = 0; i < M; i++){
+		cout << a[i] << ", ";
+	}
+	cout << endl;
+	for (i = 0; i < M; i++){
+		cout << x[ a[i] ] << ", ";
+	}
+	cout << endl;
+	for (i = 0; i < M; i++){
+		cout << x[i] << ", ";
+	}
+	cout << endl;
+	exit(1);
 }
 
 void Argentum::SetTree(std::vector<double>& dFunc){

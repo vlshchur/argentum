@@ -221,7 +221,7 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 				CopyBranchR(i);
 			else{
 				CopyBranchR(i, rPack[i].el[0]-p, rPack[i].el[1]-p);
-				/*for (j = rPack[i].el[0]; j < rPack[i].el[1]; j++){
+				for (j = rPack[i].el[0]; j < rPack[i].el[1]; j++){
 //					if (q < 0 or q >= M)
 //						cout << "Checkpoint 1, q = " << q << endl;
 //					if (j < 0 or j >= M)
@@ -229,10 +229,10 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 					d_tmp[q] = d[j];
 					b[q] = a[j];
 					q++;
-				}*/
-				memcpy(d_tmp+q, d+rPack[i].el[0], sizeof(double)*(rPack[i].el[1]-rPack[i].el[0]));
-				memcpy(b+q, a+rPack[i].el[0], sizeof(int)*(rPack[i].el[1]-rPack[i].el[0]));
-				q += (rPack[i].el[1]-rPack[i].el[0]);				
+				}
+//				memcpy(d_tmp+q, d+rPack[i].el[0], sizeof(double)*(rPack[i].el[1]-rPack[i].el[0]));
+//				memcpy(b+q, a+rPack[i].el[0], sizeof(int)*(rPack[i].el[1]-rPack[i].el[0]));
+//				q += (rPack[i].el[1]-rPack[i].el[0]);				
 			}
 		}
 	}
@@ -243,7 +243,7 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 	    rPack1[i].el[1] += p;
 	}
 	if (oneBr+1 < rM1){
-		/*j = 0;
+		j = 0;
     	for(i = rPack1[oneBr+1].el[0]; i < rPack1[rM1-1].el[1]; i++){
 //			if (i < 0 or i >= M)
 //				cout << "Checkpoint 2, i = " << i << endl;
@@ -252,9 +252,9 @@ void Argentum::FormBranch(int L, int R){ //this relies on the fact that there is
 			d[i] = d_tmp[j];
 			a[i] = b[j];
 			j++;
-		}*/
-		memcpy(d+rPack1[oneBr+1].el[0], d_tmp, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
-		memcpy(a+rPack1[oneBr+1].el[0], b, sizeof(int)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
+		}
+//		memcpy(d+rPack1[oneBr+1].el[0], d_tmp, sizeof(double)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
+//		memcpy(a+rPack1[oneBr+1].el[0], b, sizeof(int)*(rPack1[lastZero].el[1] - rPack1[oneBr+1].el[0]));
 	}
 }
 
@@ -318,24 +318,24 @@ void Argentum::RecombPBWT(bool debug){
             u++;
             if (i < rM1 - 1)
                 DL = rd1[i+1];
-            /*for (j = rPack1[i].el[0]+1; j < rPack1[i].el[1]; j++){
-				if (u < 0 or u >= M){
-					cout << "Checkpoint 3, u = " << u << endl;
-					cout << "Error at site " << siteNumber << endl;
-					exit(0);
-				}
-				if (j < 0 or j >= M){
-					cout << "Checkpoint 3, j= " << j << endl;
-					cout << "Error at site " << siteNumber << endl;
-					exit(0);
-				}
+            for (j = rPack1[i].el[0]+1; j < rPack1[i].el[1]; j++){
+//				if (u < 0 or u >= M){
+//					cout << "Checkpoint 3, u = " << u << endl;
+//					cout << "Error at site " << siteNumber << endl;
+//					exit(0);
+//				}
+//				if (j < 0 or j >= M){
+//					cout << "Checkpoint 3, j= " << j << endl;
+//					cout << "Error at site " << siteNumber << endl;
+//					exit(0);
+//				}
                 d_tmp[u] = d[j];
                 b[u] = a[j];
                 u++;
-			}*/
-			memcpy(d_tmp+u, d+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
-			memcpy(b+u, a+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
-			u += (rPack1[i].el[1] - rPack1[i].el[0] - 1);
+			}
+//			memcpy(d_tmp+u, d+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
+//			memcpy(b+u, a+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
+//			u += (rPack1[i].el[1] - rPack1[i].el[0] - 1);
 		}
 	}
     d_tmp[ rPack1[brId].el[0] - (num1 - num2) ] = D1;
