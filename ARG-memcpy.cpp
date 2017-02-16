@@ -334,7 +334,7 @@ void Argentum::RecombPBWT(bool debug){
                 u++;
 			}*/
 			memcpy(d_tmp+u, d+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
-			memcpy(b+u, a+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(double) );
+			memcpy(b+u, a+rPack1[i].el[0]+1, (rPack1[i].el[1] - rPack1[i].el[0] - 1)*sizeof(int) );
 			u += (rPack1[i].el[1] - rPack1[i].el[0] - 1);
 		}
 	}
