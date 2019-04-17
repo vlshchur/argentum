@@ -10,7 +10,7 @@ void UpString(char *str, char **out){ //Input string 'str', the result is an upp
 	}
 }
 
-void ReadFile (char *filename){
+void ReadFile (char *filename, int N){
 	char c;
 	int i;
 	time_t t1, t2;
@@ -18,7 +18,7 @@ void ReadFile (char *filename){
 	std::vector<int> x;
 
 	//Open the file with scrm output
-	int N = 100; //Find the number of haplotypes in the file, e.g. from the first line as it is of the form "scrm NUMBER_OF_HAPLOTYPES ........."
+//	int N = 100; //Find the number of haplotypes in the file, e.g. from the first line as it is of the form "scrm NUMBER_OF_HAPLOTYPES ........."
 	std::cout << "Reading from " << filename << ". File contains " << N << " samples." << std::endl;
 	Argentum ARG(N);//construct ARG class with N haplotypes
 	for (i = 0; i < ARG.GetSize(); i++)//initialise vector of length N
@@ -33,7 +33,25 @@ void ReadFile (char *filename){
 		exit(1);
 	}
 
-	for (i=0; i<100000; i++){
+	int siteNum = 0;
+	int j = 0;
+	while(myfile.get(first)){
+		if (first == '\n'){
+			ARG.SetSiteNumber(siteNum);
+			if (i == -1) {
+				ARG.PrintTreeForTest(x);
+			} 
+			ARG.FeedSite(x);
+			ARG.PrintTree();
+			siteNum++;
+			j = 0;
+			continue;
+		}
+		x[j] = first - '0';
+		j++;
+	}
+
+/*	for (i=0; i<numLines; i++){
 		for (int j=0; j<N; j++) {
 			myfile.get(first); //read symbol
 			x[j] = first - '0'; //convert char into int			
@@ -47,16 +65,28 @@ void ReadFile (char *filename){
 			ARG.PrintTreeForTest(x);
 		} 
 		ARG.FeedSite(x);
-	}
+	}*/
 	cout << "Reading Complete. " << std::endl;
 	myfile.close();
 }
 
 void Argentum::PrintTree(){
 	int i;
-	std::cout << "Tree with " << M << " leaves." << std::endl;
-	for (i = 0; i <M; i++)
-		std::cout << i << '\t' << d[i] << '\t' << a[i] << std::endl;
+//	std::cout << "Tree with " << M << " leaves." << std::endl;
+	for (i = 0; i <M; i++){
+		std::cout << a[i];
+		if (i != M-1)
+			std::cout << ",";
+	}
+	std::cout << std::endl;
+	for (i = 0; i <M; i++){
+		std::cout << d[i];
+		if (i != M-1)
+			std::cout << ",";
+	}
+	std::cout << std::endl;
+//	std::cout << std::endl;
+//		std::cout << i << '\t' << d[i] << '\t' << a[i] << std::endl;
 }
 
 void Argentum::PrintReducedTree(){

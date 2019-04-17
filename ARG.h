@@ -137,4 +137,4 @@ class Argentum{
 
 };
 
-void ReadFile(char *filename);
+void ReadFile(char *filename, int N);

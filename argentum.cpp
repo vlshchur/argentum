@@ -34,10 +34,10 @@ void Help(){
 int main(int argc, char *argv[]){
 /*	PerformTest();
 	return 1;*/
-	if (argc < 2){
-		cout << "Missing input file." << endl;
+	if (argc < 3){
+		cout << "Missing input file and number of haplotypes in the file. Example:\n\t./argentum input.dat 100." << endl;
 		return 0;
 	}
-	ReadFile(argv[1]);
+	ReadFile(argv[1], atoi(argv[2]));
 	return 1;
 }
