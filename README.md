@@ -10,3 +10,5 @@ You need to provide the filename as the first argument and the nujmber of haplot
 
 The ouput is in the planar tree representation format as described in https://www.biorxiv.org/content/10.1101/542035v1
 Each tree is encoded by two lines. The first line is the permutation of haplotype ids, the second line is the similarity in the planar ordering.
+
+See also https://github.com/nvalimak/argentum for the version which implements many other features (like forward-backward run, mincut algorithm etc). Though that version does not scale very well for large (>10000) sample size.
