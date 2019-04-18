@@ -10,7 +10,7 @@ void UpString(char *str, char **out){ //Input string 'str', the result is an upp
 	}
 }
 
-void ReadFile (char *filename, int N){
+void ReadFile (char *filename, int N, bool similarity_out){
 	char c;
 	int i;
 	time_t t1, t2;
@@ -42,7 +42,7 @@ void ReadFile (char *filename, int N){
 				ARG.PrintTreeForTest(x);
 			} 
 			ARG.FeedSite(x);
-			ARG.PrintTree();
+			ARG.PrintTree(similarity_out);
 			siteNum++;
 			j = 0;
 			continue;
@@ -70,17 +70,22 @@ void ReadFile (char *filename, int N){
 	myfile.close();
 }
 
-void Argentum::PrintTree(){
-	int i;
+void Argentum::PrintTree(bool similarity){
+	double maxVal;
 //	std::cout << "Tree with " << M << " leaves." << std::endl;
-	for (i = 0; i <M; i++){
+	for (int i = 0; i <M; i++){
 		std::cout << a[i];
 		if (i != M-1)
 			std::cout << ",";
 	}
 	std::cout << std::endl;
-	for (i = 0; i <M; i++){
-		std::cout << d[i];
+	if (not similarity)
+		maxVal = *std::max_element(d+1, d+M-1);
+	for (int i = 1; i <M; i++){
+		if (similarity)
+			std::cout << d[i];
+		else
+			std::cout << maxVal + 1 - d[i];
 		if (i != M-1)
 			std::cout << ",";
 	}

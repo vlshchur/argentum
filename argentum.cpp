@@ -36,8 +36,15 @@ int main(int argc, char *argv[]){
 	return 1;*/
 	if (argc < 3){
 		cout << "Missing input file and number of haplotypes in the file. Example:\n\t./argentum input.dat 100." << endl;
-		return 0;
+		return 1;
 	}
-	ReadFile(argv[1], atoi(argv[2]));
-	return 1;
+	bool similarity_out = true;
+	if (argc == 4){
+		std::string par = argv[3];
+		if ( par == "-d")
+			similarity_out = false;
+	}
+	
+	ReadFile(argv[1], atoi(argv[2]), similarity_out);
+	return 0;
 }

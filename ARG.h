@@ -125,7 +125,7 @@ class Argentum{
 		}
 		void FeedSite(std::vector<int>&, bool = false);
 		void SetTree(std::vector<double>&);
-		void PrintTree();
+		void PrintTree(bool = true);
 		void PrintTreeForTest(std::vector<int>&);
 		void PrintReducedTree();
 		void PrintReducedTree1();
@@ -137,4 +137,4 @@ class Argentum{
 
 };
 
-void ReadFile(char *filename, int N);
+void ReadFile(char *filename, int N, bool similarity_out);
