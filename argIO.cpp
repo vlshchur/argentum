@@ -35,19 +35,24 @@ void ReadFile (char *filename, int N, bool similarity_out){
 
 	int siteNum = 0;
 	int j = 0;
+	bool is_snp = false;
 	while(myfile.get(first)){
 		if (first == '\n'){
 			ARG.SetSiteNumber(siteNum);
 			if (i == -1) {
 				ARG.PrintTreeForTest(x);
-			} 
-			ARG.FeedSite(x);
+			}
+			if (is_snp)
+				ARG.FeedSite(x);
 			ARG.PrintTree(similarity_out);
 			siteNum++;
 			j = 0;
+			is_snp = false;
 			continue;
 		}
 		x[j] = first - '0';
+		if (x[j] == 1)
+			is_snp = true;
 		j++;
 	}
 
